@@ -9,28 +9,42 @@ import {
   TypeContainer,
 } from "./style";
 
-function Card({ name, id, data }) {
-  const [colors, setColors] = useState(defaultTheme.colors);
-
+function Card({ data, loading }) {
   return (
-    <CardContainer className="card">
-      <TitleContainer>
-        <h2>{name}</h2>
-        <small>#{id}</small>
-      </TitleContainer>
+    <>
+      {loading ? (
+        <h1>Carregando </h1>
+      ) : (
+        data.map((item) => {
+          console.log(item);
+          return (
+            <CardContainer className="card" key={item.id}>
+              <TitleContainer>
+                <h2>{item.name}</h2>
+                <small>{item.id}</small>
+              </TitleContainer>
 
-      <ImgContainer className="ImgContainer">
-        <img src={data.sprites[front_default]} alt="" />
-      </ImgContainer>
+              <ImgContainer className="ImgContainer">
+                <img
+                  src={item.sprites.other.home.front_shiny}
+                  alt={item.name}
+                />
+              </ImgContainer>
 
-      <TypeContainer>
-        <p>Glass</p>
-      </TypeContainer>
+              <TypeContainer>
+                {item.types.map((type) => {
+                  return <p> {type.type.name}</p>;
+                })}
+              </TypeContainer>
 
-      <FavoriteButton>
-        <div></div>
-      </FavoriteButton>
-    </CardContainer>
+              <FavoriteButton>
+                <div></div>
+              </FavoriteButton>
+            </CardContainer>
+          );
+        })
+      )}
+    </>
   );
 }
 

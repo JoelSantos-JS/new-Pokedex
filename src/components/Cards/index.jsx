@@ -1,25 +1,44 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Card from "./components/Card";
 import { CardsContainer } from "./styles";
 
 function Cards() {
   const [data, setData] = useState([]);
+  const [url, setUrl] = useState("https://pokeapi.co/api/v2/pokemon/");
+  const [loading, setLoading] = useState(true);
+  const [nextUrl, setNextUrl] = useState();
+  const [prevUrl, setPrevUrl] = useState();
 
-  async function fetchPokemon(number) {
-    const url = `https://pokeapi.co/api/v2/pokemon/${number}`;
-    const response = await fetch(url).then((response) => response.json());
-    const dados = await setData(response);
+  async function fetchPokemon() {
+    setLoading(true);
+    const res = await axios.get(url);
 
-    return dados;
+    setNextUrl(res.data.next);
+    setPrevUrl(res.data.previous);
+    getPokemon(res.data.results);
+    setLoading(false);
   }
-  console.log(data);
+
+  const getPokemon = async (res) => {
+    res.map(async (item) => {
+      const result = await axios.get(item.url);
+      setData((state) => {
+        state = [...state, result.data];
+        state.sort((a, b) => (a.id > b.id ? 1 : -1));
+
+        return state;
+      });
+    });
+  };
+
   useEffect(() => {
-    fetchPokemon(5);
-  }, []);
+    fetchPokemon();
+  }, [url]);
 
   return (
     <CardsContainer className="cards">
-      <Card name={data.name} id={data.id} data={data} />
+      <Card data={data} loading={loading} />
     </CardsContainer>
   );
 }
