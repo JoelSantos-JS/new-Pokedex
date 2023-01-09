@@ -32,13 +32,19 @@ function Cards() {
     });
   };
 
+  const getType = async (data) => {
+    const apiTypes = await data.map((type) => type.name);
+    console.log(apiTypes);
+  };
+
   useEffect(() => {
     fetchPokemon();
+    getType(data);
   }, [url]);
 
   return (
     <CardsContainer className="cards">
-      <Card data={data} loading={loading} />
+      <Card data={data} loading={loading} key={data.id} />
     </CardsContainer>
   );
 }

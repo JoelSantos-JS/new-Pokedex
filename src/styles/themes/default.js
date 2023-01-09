@@ -17,3 +17,21 @@ export const defaultTheme = {
     default: "#9dd465",
   },
 };
+
+export const Types = [
+  "fire",
+  "grass",
+  "electric",
+  "water",
+  "ground",
+  "rock",
+  "fairy",
+  "poison",
+  "bug",
+  "dragon",
+  "psychic",
+  "flying",
+  "fighting",
+  "normal",
+  "default",
+];
